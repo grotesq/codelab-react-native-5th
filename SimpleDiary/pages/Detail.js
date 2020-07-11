@@ -1,15 +1,20 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import Container from '../components/Container';
+import Contents from '../components/Contents';
+import styled from 'styled-components/native';
+
+const Text = styled.Text`
+    font-size: 20px;
+    line-height: 28px;
+`;
 
 function Detail( { navigation } ) {
     return (
-        <View>
-            <Text>Detail</Text>
-            <Button
-                title="목록으로"
-                onPress={() => navigation.goBack() }
-            />
-        </View>
+        <Container>
+            <Contents>
+                <Text>{`Lorem Ipsum Dolar Sit Amet...`}</Text>
+            </Contents>
+        </Container>
     )
 }
 
