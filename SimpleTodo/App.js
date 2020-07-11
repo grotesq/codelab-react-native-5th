@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 import Constants from 'expo-constants';
 import _ from 'lodash';
 import AsyncStorage from '@react-native-community/async-storage';
+import produce from 'immer';
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -77,7 +78,12 @@ export default function App() {
           {list.map( item => {
             return (
               <TodoItem key={ item.id }>
-                <Check>
+                <Check onPress={()=>{
+                  store( produce( list, draft => {
+                    const index = list.indexOf( item );
+                    draft[ index ].done = !list[ index ].done;
+                  } ) );
+                }}>
                   <CheckIcon>
                     { item.done ? '✅' : '☑️' }
                   </CheckIcon>
