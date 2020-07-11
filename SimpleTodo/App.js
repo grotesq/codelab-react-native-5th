@@ -1,9 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import styled from 'styled-components/native';
+import Constants from 'expo-constants';
+import _ from 'lodash';
 
 const Container = styled.SafeAreaView`
+  flex: 1;
+  padding-top: ${Constants.statusBarHeight}px;
+`;
+const KeyboardAvoidingView = styled.KeyboardAvoidingView`
   flex: 1;
 `;
 const Contents = styled.ScrollView`
@@ -34,32 +40,60 @@ const TempText = styled.Text`
 `;
 
 export default function App() {
+  const [list, setList] = React.useState([
+    { id: '1', todo: '할 일 1' },
+    { id: '7', todo: '할 일 7' },
+  ]);
+  const [inputTodo, setInputTodo] = React.useState( '' );
+  // 리턴은 컴포넌트, 컴포넌트로 이루어진 배열
   return (
     <Container>
-      <Contents>
-        <TodoItem>
-          <TodoItemText>
-            할 일 목록 표시
-          </TodoItemText>
-          <TodoItemButton title="삭제" onPress={ () => {} }/>
-        </TodoItem>
-        <TodoItem>
-          <TodoItemText>
-            할 일 목록 2 표시
-          </TodoItemText>
-          <TodoItemButton title="삭제" onPress={ () => {} }/>
-        </TodoItem>
-        <TodoItem>
-          <TodoItemText>
-            할 일 목록 3 표시
-          </TodoItemText>
-          <TodoItemButton title="삭제" onPress={ () => {} }/>
-        </TodoItem>
-      </Contents>
-      <InputContainer>
-        <Input/>
-        <Button title="전송" onPress={ () => {} }/>
-      </InputContainer>
+      <KeyboardAvoidingView
+        behavior={ Platform.OS === 'ios' ? 'padding' : 'height' }
+      >
+        <Contents>
+          {list.map( item => {
+            return (
+              <TodoItem key={ item.id }>
+                <TodoItemText>
+                  { item.todo }
+                </TodoItemText>
+                <TodoItemButton
+                  title="삭제"
+                  onPress={ () => {
+                    setList( _.reject( list, element => element.id === item.id ) );
+                  } }
+                />
+              </TodoItem>
+            )
+          })}
+        </Contents>
+        <InputContainer>
+          <Input
+            value={ inputTodo }
+            onChangeText={ value => setInputTodo( value ) }
+          />
+          <Button
+            title="전송"
+            onPress={ () => {
+              // 원본 배열을 수정하는 push는 사용 불가
+              // inputTodo.push( { ... } );
+              if( inputTodo === '' ) {
+                return;
+              }
+              const newItem = {
+                id: new Date().getTime().toString(),
+                todo: inputTodo,
+              };
+              setList( [
+                ...list, // 전개 연산자 Spread Operator
+                newItem,
+              ] );
+              setInputTodo( '' );
+            } }
+          />
+        </InputContainer>
+      </KeyboardAvoidingView>
     </Container>
   );
 }
