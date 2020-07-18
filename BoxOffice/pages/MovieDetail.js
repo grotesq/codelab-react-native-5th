@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import axios from 'axios';
 import { ActivityIndicator } from 'react-native';
 import moment from 'moment';
+import fetch from '../net/fetch';
 
 const Container = styled.SafeAreaView`
     flex: 1;
@@ -54,11 +55,11 @@ const HeaderTitle = styled.Text`
 function MovieDetail(props) {
     const [info, setInfo] = React.useState(null);
     React.useEffect(()=>{
-        let url = 'http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=bbd8a6868e6ee578589f5f5efa49dd40';
+        let url = 'https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=bbd8a6868e6ee578589f5f5efa49dd40';
         url += '&movieCd=' + props.route.params.movieCd;
-        axios.get( url )
-            .then( response => {
-                setInfo( response.data.movieInfoResult.movieInfo );
+        fetch( url )
+            .then( data => {
+                setInfo( data.movieInfoResult.movieInfo );
             } )
             .catch( error => {
                 alert( error.message );
