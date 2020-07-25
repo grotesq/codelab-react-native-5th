@@ -43,7 +43,10 @@ function Component(props) {
                 storage.append( {
                     url,
                     hashtags,
-                } );
+                } )
+                    .then( () => {
+                        props.navigation.goBack();
+                    } );
             } }/>
         </>
     )
