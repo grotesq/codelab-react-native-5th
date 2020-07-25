@@ -28,7 +28,7 @@ const options = {
 
 const config = {
   headers: {
-    Authorization: 'Client-ID 34484f7d8dc5698'
+    Authorization: 'Client-ID 21e459cc3b8bb2c'
   }
 };
 
@@ -62,13 +62,13 @@ const App: () => React$Node = () => {
               // setUrl( 'data:' + response.type + ';base64,' + response.data );
               const params = new FormData();
               params.append( 'image', response.data );
-              axios.post( 'https://api.imgur.com/3/upload', params, config )
+              axios.post( 'https://api.imgur.com/3/image', params, config )
                 .then( response => {
-                  console.log( response );
+                  setUrl( response.data.data.link );
                 } )
                 .catch(error => {
-                  // console.log( error );
-                  console.log( error.response.data );
+                  console.warn( error );
+                  alert( 'Error : ' + error.response.data.data.error );
                 } )
                 .finally( () => {
                   setIsLoading(false);
